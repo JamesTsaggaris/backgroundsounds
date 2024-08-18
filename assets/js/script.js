@@ -110,15 +110,21 @@ document.addEventListener('DOMContentLoaded', function () {
         soundGrid.appendChild(soundItem);
     });
 
-    // Master mute/unmute button functionality
-    masterPlayPauseButton.addEventListener('click', () => {
+    
+    function toggleMasterPlayPause() {
         isMasterMuted = !isMasterMuted;
-
-        toggleMuteAll(isMasterMuted); // Mute or unmute all sounds
-
+        toggleMuteAll(isMasterMuted);
         updateMasterIcon();
+    }
+
+    masterPlayPauseButton.addEventListener('click', toggleMasterPlayPause);
+
+    document.addEventListener('keydown', (event) => {
+        if (event.code === 'Space') {
+            event.preventDefault(); // Prevent default space bar action (e.g., page scrolling)
+            toggleMasterPlayPause();
+        }
     });
 
-    // Initialize the master icon on load
     updateMasterIcon();
 });

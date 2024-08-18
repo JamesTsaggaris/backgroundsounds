@@ -3,10 +3,11 @@
     padding: 0;
     box-sizing: border-box;
 }
+
 html {
     background: url('background.png') no-repeat center center fixed;
     background-size: cover;
-    min-height: 100%; /* Changed from height to min-height */
+    min-height: 100%;
     width: 100%;
 }
 
@@ -16,15 +17,15 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100%; /* Changed from height to min-height */
+    min-height: 100%;
     width: 100%;
     overflow: auto;
     position: relative;
-    padding: 24px 0; /* Added padding to allow spacing at the top and bottom */
+    padding: 24px 0;
 }
 
 .spacing {
-    height: 12px; /* Ensure spacing div has height */
+    height: 12px;
 }
 
 body::before {
@@ -48,7 +49,7 @@ body::before {
     flex-direction: column;
     align-items: center;
     gap: 24px;
-    margin-bottom: 24px; /* Added margin at the bottom to prevent content cutoff */
+    margin-bottom: 24px;
 }
 
 .master-button {
@@ -138,4 +139,11 @@ body::before {
 
 .volume-control:focus {
     outline: none;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .sound-item {
+        flex: 0 1 100%; /* Make each item take up the full width on small screens */
+    }
 }

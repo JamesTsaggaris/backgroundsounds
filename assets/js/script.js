@@ -28,24 +28,62 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const soundGrid = document.getElementById('sound-grid');
     const masterPlayPauseButton = document.getElementById('master-play-pause');
-    let isPlaying = false;
+    let isMasterOn = false; 
+
+
+    function fadeIn(audioElement, duration = 1000) {
+        let volume = 0;
+        audioElement.volume = 0;
+        audioElement.play();
+
+        const interval = 50;
+        const step = interval / duration;
+
+        const fade = setInterval(() => {
+            volume += step;
+            if (volume >= 1) {
+                volume = 1;
+                clearInterval(fade);
+            }
+            audioElement.volume = volume;
+        }, interval);
+    }
+
+
+    function fadeOut(audioElement, duration = 1000) {
+        let volume = audioElement.volume;
+
+        const interval = 50;
+        const step = interval / duration;
+
+        const fade = setInterval(() => {
+            volume -= step;
+            if (volume <= 0) {
+                volume = 0;
+                audioElement.pause();
+                clearInterval(fade);
+            }
+            audioElement.volume = volume;
+        }, interval);
+    }
 
     sounds.forEach((sound, index) => {
         const soundItem = document.createElement('div');
         soundItem.classList.add('sound-item');
 
         const audioElement = document.createElement('audio');
-        audioElement.src = `audio/${sound}`;
+        audioElement.src = `assets/audio/${sound}`;
         audioElement.id = `audio-${index}`;
+        audioElement.loop = true; 
 
         const playButton = document.createElement('button');
         playButton.innerText = 'Play';
         playButton.addEventListener('click', () => {
             if (audioElement.paused) {
-                audioElement.play();
+                fadeIn(audioElement); 
                 playButton.innerText = 'Pause';
             } else {
-                audioElement.pause();
+                fadeOut(audioElement); 
                 playButton.innerText = 'Play';
             }
         });
@@ -68,15 +106,18 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     masterPlayPauseButton.addEventListener('click', () => {
-        isPlaying = !isPlaying;
+        isMasterOn = !isMasterOn;
+
         const allAudios = document.querySelectorAll('audio');
         allAudios.forEach(audio => {
-            if (isPlaying) {
-                audio.play();
-                masterPlayPauseButton.innerText = 'Pause All';
+            if (isMasterOn) {
+                if (!audio.paused) {
+                    fadeIn(audio);
+                }
+                masterPlayPauseButton.innerText = 'Turn off';
             } else {
-                audio.pause();
-                masterPlayPauseButton.innerText = 'Play All';
+                fadeOut(audio);
+                masterPlayPauseButton.innerText = 'Turn on';
             }
         });
     });
